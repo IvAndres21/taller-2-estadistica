@@ -3504,12 +3504,11 @@ border-radius: 0px;
     border:1px solid var(--verde-borde);
     border-radius:8px;
     padding:0.8rem;
-    position:-webkit-sticky!important;
-    position:sticky!important;
+    position:fixed!important;
     top:1rem!important;
     left:auto!important;
-    width:100%!important;
-    max-width:none!important;
+    width:auto!important;
+    max-width:260px!important;
     max-height:calc(100vh - 2rem);
     margin-left:0!important;
     overflow:auto;
@@ -3522,6 +3521,9 @@ border-radius: 0px;
     #TOC{
       position:static!important;
       top:auto!important;
+      left:auto!important;
+      width:100%!important;
+      max-width:none!important;
       max-height:none;
     }
   }
@@ -4470,6 +4472,33 @@ $(document).ready(function ()  {
 
 <script>
 window.addEventListener('load', function () {
+  function positionFloatingToc() {
+    var toc = document.getElementById('TOC');
+    var tocColumn = toc && toc.parentElement;
+    var header = document.querySelector('header.unimag');
+    var mobileBreakpoint = 767;
+    var gap = 16;
+
+    if (!toc || !tocColumn) return;
+
+    if (window.innerWidth <= mobileBreakpoint) {
+      toc.style.top = '';
+      toc.style.left = '';
+      toc.style.width = '';
+      toc.style.maxHeight = '';
+      return;
+    }
+
+    var columnRect = tocColumn.getBoundingClientRect();
+    var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+    var topOffset = Math.max(gap, headerBottom + gap);
+
+    toc.style.top = Math.round(topOffset) + 'px';
+    toc.style.left = Math.round(columnRect.left) + 'px';
+    toc.style.width = Math.round(columnRect.width) + 'px';
+    toc.style.maxHeight = 'calc(100vh - ' + Math.round(topOffset + gap) + 'px)';
+  }
+
   function syncPlotlyWidgetHeights() {
     document.querySelectorAll('script[data-for]').forEach(function (scriptEl) {
       var widgetId = scriptEl.getAttribute('data-for');
@@ -4499,8 +4528,12 @@ window.addEventListener('load', function () {
     });
   }
 
+  positionFloatingToc();
   syncPlotlyWidgetHeights();
+  window.addEventListener('scroll', positionFloatingToc, { passive: true });
+  window.addEventListener('resize', positionFloatingToc);
   setTimeout(syncPlotlyWidgetHeights, 150);
+  setTimeout(positionFloatingToc, 150);
 });
 </script>
 
