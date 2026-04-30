@@ -4483,6 +4483,7 @@ window.addEventListener('load', function () {
     if (!toc || !tocColumn) return;
 
     if (window.innerWidth <= mobileBreakpoint) {
+      toc.style.display = '';
       toc.style.top = '';
       toc.style.left = '';
       toc.style.width = '';
@@ -4492,7 +4493,13 @@ window.addEventListener('load', function () {
 
     var columnRect = tocColumn.getBoundingClientRect();
     var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
-    var topOffset = Math.max(gap, columnRect.top, headerBottom + gap);
+    if (headerBottom > 0) {
+      toc.style.display = 'none';
+      return;
+    }
+
+    toc.style.display = '';
+    var topOffset = Math.max(gap, columnRect.top);
 
     toc.style.top = Math.round(topOffset) + 'px';
     toc.style.left = Math.round(columnRect.left) + 'px';
