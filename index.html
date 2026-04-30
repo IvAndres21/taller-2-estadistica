@@ -3500,6 +3500,11 @@ border-radius: 0px;
   /* ---- HR / SEPARADORES ---- */
   hr{border:0;border-top:2px dashed var(--verde-borde);margin:2.5rem 0;}
 
+  /* ---- GRÁFICAS ---- */
+  .plotly.html-widget{
+    margin-bottom:0!important;
+  }
+
   /* ---- LATEX (MathJax) ---- */
   .MathJax_Display{color:var(--azul);}
 
@@ -4424,9 +4429,46 @@ $(document).ready(function ()  {
     };
     options.showAndHide = true;
     options.smoothScroll = true;
+    options.extendPage = false;
 
     // tocify
     var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<script>
+window.addEventListener('load', function () {
+  function syncPlotlyWidgetHeights() {
+    document.querySelectorAll('script[data-for]').forEach(function (scriptEl) {
+      var widgetId = scriptEl.getAttribute('data-for');
+      var widgetEl = document.getElementById(widgetId);
+      if (!widgetEl) return;
+
+      try {
+        var widgetConfig = JSON.parse(scriptEl.textContent);
+        var layoutHeight = widgetConfig &&
+          widgetConfig.x &&
+          widgetConfig.x.layout &&
+          widgetConfig.x.layout.height;
+
+        if (typeof layoutHeight === 'number' && layoutHeight > 0) {
+          widgetEl.style.height = layoutHeight + 'px';
+          if (window.Plotly && window.Plotly.Plots && typeof window.Plotly.Plots.resize === 'function') {
+            window.Plotly.Plots.resize(widgetEl);
+          }
+        }
+      } catch (error) {
+        // Leave the original widget height in place if the payload cannot be parsed.
+      }
+    });
+
+    document.querySelectorAll('.tocify-extend-page').forEach(function (node) {
+      node.remove();
+    });
+  }
+
+  syncPlotlyWidgetHeights();
+  setTimeout(syncPlotlyWidgetHeights, 150);
 });
 </script>
 
