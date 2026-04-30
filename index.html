@@ -4475,7 +4475,6 @@ window.addEventListener('load', function () {
   function positionFloatingToc() {
     var toc = document.getElementById('TOC');
     var tocColumn = toc && toc.parentElement;
-    var header = document.querySelector('header.unimag');
     var mobileBreakpoint = 767;
     var gap = 16;
 
@@ -4490,8 +4489,7 @@ window.addEventListener('load', function () {
     }
 
     var columnRect = tocColumn.getBoundingClientRect();
-    var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
-    var topOffset = Math.max(gap, headerBottom + gap);
+    var topOffset = Math.max(gap, columnRect.top);
 
     toc.style.top = Math.round(topOffset) + 'px';
     toc.style.left = Math.round(columnRect.left) + 'px';
