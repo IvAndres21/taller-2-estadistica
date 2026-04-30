@@ -3441,7 +3441,7 @@ border-radius: 0px;
   body{font-family:'Lato',sans-serif;background:var(--blanco);color:var(--gris-oscuro);line-height:1.7;}
 
   /* ---- HEADER UNIVERSITARIO ---- */
-  header.unimag{background:linear-gradient(135deg,var(--verde) 0%,#0d4225 60%,#071e10 100%);color:white;padding:2.2rem 2rem;position:relative;overflow:hidden;margin:-1rem -15px 1.5rem;}
+  header.unimag{background:linear-gradient(135deg,var(--verde) 0%,#0d4225 60%,#071e10 100%);color:white;padding:2.2rem 2rem;position:relative;overflow:hidden;margin:-1rem -15px 1.5rem;z-index:20;}
   header.unimag::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.02) 0,rgba(255,255,255,0.02) 1px,transparent 0,transparent 50%);background-size:20px 20px;}
   header.unimag .header-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;}
   header.unimag .logo-wrap{width:120px;height:120px;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));}
@@ -3512,6 +3512,7 @@ border-radius: 0px;
     max-height:calc(100vh - 2rem);
     margin-left:0!important;
     overflow:auto;
+    z-index:10;
   }
   .tocify-header > .tocify-item{background:transparent!important;color:var(--verde)!important;font-weight:700;}
   .tocify-subheader > .tocify-item{color:var(--gris-medio)!important;}
@@ -4475,6 +4476,7 @@ window.addEventListener('load', function () {
   function positionFloatingToc() {
     var toc = document.getElementById('TOC');
     var tocColumn = toc && toc.parentElement;
+    var header = document.querySelector('header.unimag');
     var mobileBreakpoint = 767;
     var gap = 16;
 
@@ -4489,7 +4491,8 @@ window.addEventListener('load', function () {
     }
 
     var columnRect = tocColumn.getBoundingClientRect();
-    var topOffset = Math.max(gap, columnRect.top);
+    var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+    var topOffset = Math.max(gap, columnRect.top, headerBottom + gap);
 
     toc.style.top = Math.round(topOffset) + 'px';
     toc.style.left = Math.round(columnRect.left) + 'px';
