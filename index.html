@@ -3470,8 +3470,20 @@ border-radius: 0px;
   code{background:var(--verde-palido);color:var(--verde);padding:2px 6px;border-radius:4px;font-family:'Source Code Pro',monospace;font-size:0.88em;}
   pre code{padding:0;}
 
-  /* Salida de R (cat) */
-  pre:not([class]){background:#f7faf8!important;color:var(--gris-oscuro)!important;border-left:4px solid var(--verde-claro);border-radius:0 6px 6px 0;}
+  /* Salida de R (cat) — bloques sin clase */
+  pre:not([class]),
+  pre:not([class]) code{
+    background:#f7faf8!important;
+    color:#1e2022!important;
+    font-family:'Source Code Pro',monospace;
+    font-weight:500;
+  }
+  pre:not([class]){
+    border-left:4px solid var(--verde-claro);
+    border-radius:0 6px 6px 0;
+    padding:0.9rem 1.1rem!important;
+    box-shadow:inset 0 1px 0 rgba(45,158,87,0.08);
+  }
 
   /* ---- TABLAS ---- */
   table{border-collapse:collapse;width:auto;margin:1rem 0;background:white;border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(26,107,58,0.1);}
